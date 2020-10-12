@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="index.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LORD OF THE RINGS GAME</title>
+</head>
+
+<body>
+    <div class="navigation">
+        <input type="radio" name="movement_rl" id="left_rb">Left</td>
+        <input type="radio" name="movement_rl" id="right_rb">Right</td>
+        <input type="radio" name="movement_tb" id="top_rb">Top</td>
+        <input type="radio" name="movement_tb" id="bottom_rb">Bottom</td>
+
+        <button class="btnMove">Move</button>
+        <button class="btnReset">Reset</button>
+    </div>
+    <br>
+    <div class="scoreCard">
+        <p id="scorePlain"> Current Score is : </p>
+        <span id="score" style="font-weight: bold"> 0 </span>
+    </div>
+    <div class="instructions">
+        <ul>
+            <p>Instructions</p>
+            <li>The goal of the game is taking the ring and casting it into the Mt. Doom.</li>
+            <li>Choose your direction and then press Move to start playing.</li>
+            <li>You can alter your direction while moving by clicking the other direction buttons.</li>
+        </ul>
+    </div>
+    <div class="gameTable">
+        <img src="https://www.zicev.org.tr/wp-content/uploads/2018/05/black-background-1468370534d5s.jpg" alt="black area" class="area">
+        <img src="https://img2.pngio.com/frodo-baggins-dragon-rap-battles-wiki-fandom-frodo-baggins-png-260_580.png" alt="frodo" class="frodo">
+        <img src="https://img.pngio.com/war-of-the-ring-middle-earth-shadow-of-war-wiki-fandom-the-one-ring-png-256_256.png" alt="ring" class="oneRing">
+        <img src="https://vignette.wikia.nocookie.net/lotr/images/8/8c/Mount_doom.png/revision/latest?cb=20060310232853" alt="mt doom" class="mtDoom">
+    </div>
+
+    <script src="index.js"></script>
+</body>
+
+</html>
