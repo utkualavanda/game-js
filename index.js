@@ -1,4 +1,4 @@
-var frodoLocation = [0,0], ringLocation=[] , resetCheck = false, first = 0, score = 0;
+isReset = false, firstMove = true, score = 0;
 
 var frodoSelector = document.querySelector('.frodo');
 var areaSelector = document.querySelector('.area');
@@ -16,6 +16,7 @@ class Ring {
 }
 
 class MtDoom {
+    frodoLocation = [0,0]
     randomLocation() {
         var rndmMtDoom = Math.floor(Math.random() * (Math.floor(areaSelector.offsetWidth) - mtDoomSelector.offsetWidth));
         mtDoomSelector.style.left = rndmMtDoom + 'px';
@@ -24,13 +25,11 @@ class MtDoom {
 
 class Frodo {
     startLocation() {
-        frodoLocation[0] = 0;
-        frodoLocation[1] = 0;
+        frodo.frodoLocation = [0, 0];
     }
 }
 
-class Move {
-
+class Animation {
     reset(score) {
         frodoSelector.style.left = 0 + 'px';
         frodoSelector.style.top = 0 + 'px';
@@ -41,8 +40,8 @@ class Move {
         frodo.startLocation();
         theRing.randomLocation();
         mtDoom.randomLocation();
-        resetCheck = true;
-        first = 0;
+        isReset = true;
+        firstMove = true;
         score = score;
         document.getElementById("score").textContent = score;
     }
@@ -57,39 +56,39 @@ class Move {
         }
 
         if (right_rb.checked) {
-            resetCheck = false;
+            isReset = false;
             var id_r = setInterval(frame, 20);
             function frame() {
-                if (resetCheck) {
+                if (isReset) {
                     clearInterval(id_r);
                     return;
                 } else {
-                    if (frodoLocation[0] == (areaSelector.offsetWidth) - frodoSelector.offsetWidth) {
+                    if (frodo.frodoLocation[0] == (areaSelector.offsetWidth) - frodoSelector.offsetWidth) {
                         clearInterval(id_r);
                     } else {
                         if (left_rb.checked) {
                             allClearInterval();
                         } else {
-                            frodoLocation[0]++;
-                            frodoSelector.style.left = frodoLocation[0] + 'px';
-                            if (first == 0) {
+                            frodo.frodoLocation[0]++;
+                            frodoSelector.style.left = frodo.frodoLocation[0] + 'px';
+                            if (firstMove) {
                                 if (bottom_rb.checked || top_rb.checked) {
                                     allClearInterval();
-                                    first++;
+                                    firstMove=false;
                                 }
                             }
-                            if (oneRingSelector.offsetLeft <= frodoLocation[0] && frodoLocation[0] <= oneRingSelector.offsetLeft + oneRingSelector.offsetWidth) {
-                                if (oneRingSelector.offsetTop <= (frodoLocation[1] + 1) && frodoLocation[1] <= oneRingSelector.offsetTop + oneRingSelector.offsetHeight) {
-                                    oneRingSelector.style.left = (frodoLocation[0] + 1) + 'px';
+                            if (oneRingSelector.offsetLeft <= frodo.frodoLocation[0] && frodo.frodoLocation[0] <= oneRingSelector.offsetLeft + oneRingSelector.offsetWidth) {
+                                if (oneRingSelector.offsetTop <= (frodo.frodoLocation[1] + 1) && frodo.frodoLocation[1] <= oneRingSelector.offsetTop + oneRingSelector.offsetHeight) {
+                                    oneRingSelector.style.left = (frodo.frodoLocation[0] + 1) + 'px';
                                 }
                             }
-                            if (frodoSelector.offsetTop == areaSelector.offsetWidth && (frodoSelector.offsetLeft == mtDoomSelector.offsetLeft || frodoSelector.offsetLeft == (mtDoomSelector.offsetLeft + frodoSelector.offsetWidth))) {
+                            if (frodoSelector.offsetTop == (areaSelector.offsetHeight - frodoSelector.offsetHeight) && (frodoSelector.offsetLeft >= mtDoomSelector.offsetLeft && frodoSelector.offsetLeft <= mtDoomSelector.offsetLeft + mtDoomSelector.offsetWidth - frodoSelector.offsetWidth)) {
                                 if (frodoSelector.offsetTop + 1 == oneRingSelector.offsetTop) {
                                     score++;
                                     document.getElementById("score").textContent = score;
                                     alert("You WON ! The eye of Sauron has been destroyed.");
                                 } else {
-                                    alert("You LOST ! Sauron took back his ring and he will rule the world.");
+                                    alert("You LOST ! Sauron has taken back his ring and he will rule the world.");
                                     if (score != 0) { score--; }
                                     document.getElementById("score").textContent = score;
                                 }
@@ -100,40 +99,41 @@ class Move {
                 }
             }
         }
+
         if (left_rb.checked) {
-            resetCheck = false;
+            isReset = false;
             var id_l = setInterval(frame, 20);
             function frame() {
-                if (resetCheck) {
+                if (isReset) {
                     clearInterval(id_l);
                     return;
                 } else {
-                    if (frodoLocation[0] == areaSelector.offsetLeft) {
+                    if (frodo.frodoLocation[0] == areaSelector.offsetLeft) {
                         clearInterval(id_l);
                     } else {
                         if (right_rb.checked) {
                             allClearInterval();
                         } else {
-                            frodoLocation[0]--;
-                            frodoSelector.style.left = frodoLocation[0] + 'px';
-                            if (first == 0) {
+                            frodo.frodoLocation[0]--;
+                            frodoSelector.style.left = frodo.frodoLocation[0] + 'px';
+                            if (firstMove) {
                                 if (bottom_rb.checked || top_rb.checked) {
                                     allClearInterval();
-                                    first++;
+                                    firstMove=false;
                                 }
                             }
-                            if (oneRingSelector.offsetLeft + oneRingSelector.offsetWidth >= frodoLocation[0] && (frodoLocation[0] + 2) >= oneRingSelector.offsetLeft) {
-                                if (oneRingSelector.offsetTop <= (frodoLocation[1] + 1) && frodoLocation[1] <= oneRingSelector.offsetTop + oneRingSelector.offsetHeight) {
-                                    oneRingSelector.style.left = (frodoLocation[0] - 1) + 'px';
+                            if (oneRingSelector.offsetLeft + oneRingSelector.offsetWidth >= frodo.frodoLocation[0] && (frodo.frodoLocation[0] + 2) >= oneRingSelector.offsetLeft) {
+                                if (oneRingSelector.offsetTop <= (frodo.frodoLocation[1] + 1) && frodo.frodoLocation[1] <= oneRingSelector.offsetTop + oneRingSelector.offsetHeight) {
+                                    oneRingSelector.style.left = (frodo.frodoLocation[0] - 1) + 'px';
                                 }
                             }
-                            if (frodoSelector.offsetTop == areaSelector.offsetWidth && (frodoSelector.offsetLeft == mtDoomSelector.offsetLeft || frodoSelector.offsetLeft == (mtDoomSelector.offsetLeft + frodoSelector.offsetWidth))) {
+                            if (frodoSelector.offsetTop == (areaSelector.offsetHeight - frodoSelector.offsetHeight) && (frodoSelector.offsetLeft >= mtDoomSelector.offsetLeft && frodoSelector.offsetLeft <= mtDoomSelector.offsetLeft + mtDoomSelector.offsetWidth - frodoSelector.offsetWidth)) {
                                 if (frodoSelector.offsetTop + 1 == oneRingSelector.offsetTop) {
                                     score++;
                                     document.getElementById("score").textContent = score;
                                     alert("You WON ! The eye of Sauron has been destroyed.");
                                 } else {
-                                    alert("You LOST ! Sauron took back his ring and he will rule the world.");
+                                    alert("You LOST ! Sauron has taken back his ring and he will rule the world.");
                                     if (score != 0) { score--; }
                                     document.getElementById("score").textContent = score;
                                 }
@@ -144,40 +144,41 @@ class Move {
                 }
             }
         }
+
         if (bottom_rb.checked) {
-            resetCheck = false;
+            isReset = false;
             var id_b = setInterval(frame, 20);
             function frame() {
-                if (resetCheck) {
+                if (isReset) {
                     clearInterval(id_b);
                     return;
                 } else {
-                    if (frodoLocation[1] == (areaSelector.offsetHeight - frodoSelector.offsetHeight)) {
+                    if (frodo.frodoLocation[1] == (areaSelector.offsetHeight - frodoSelector.offsetHeight)) {
                         clearInterval(id_b);
                     } else {
                         if (top_rb.checked) {
                             allClearInterval();
                         } else {
-                            frodoLocation[1]++;
-                            frodoSelector.style.top = frodoLocation[1] + "px";
-                            if (first == 0) {
+                            frodo.frodoLocation[1]++;
+                            frodoSelector.style.top = frodo.frodoLocation[1] + "px";
+                            if (firstMove) {
                                 if (right_rb.checked || left_rb.checked) {
                                     allClearInterval();
-                                    first++;
+                                    firstMove=false;
                                 }
                             }
-                            if (oneRingSelector.offsetLeft <= (frodoLocation[0] + 1) && (frodoLocation[0] + 1) <= oneRingSelector.offsetLeft + oneRingSelector.offsetWidth) {
-                                if (oneRingSelector.offsetTop <= frodoLocation[1] && frodoLocation[1] <= oneRingSelector.offsetTop + oneRingSelector.offsetHeight) {
-                                    oneRingSelector.style.top = (frodoLocation[1] + 1) + 'px';
+                            if (oneRingSelector.offsetLeft <= (frodo.frodoLocation[0] + 1) && (frodo.frodoLocation[0] + 1) <= oneRingSelector.offsetLeft + oneRingSelector.offsetWidth) {
+                                if (oneRingSelector.offsetTop <= frodo.frodoLocation[1] && frodo.frodoLocation[1] <= oneRingSelector.offsetTop + oneRingSelector.offsetHeight) {
+                                    oneRingSelector.style.top = (frodo.frodoLocation[1] + 1) + 'px';
                                 }
                             }
-                            if (frodoSelector.offsetTop == (areaSelector.offsetHeight - frodoSelector.offsetHeight) && (frodoSelector.offsetLeft == mtDoomSelector.offsetLeft || frodoSelector.offsetLeft == (mtDoomSelector.offsetLeft + frodoSelector.offsetWidth))) {
+                            if (frodoSelector.offsetTop == (areaSelector.offsetHeight - frodoSelector.offsetHeight) && (frodoSelector.offsetLeft >= mtDoomSelector.offsetLeft && frodoSelector.offsetLeft <= mtDoomSelector.offsetLeft + mtDoomSelector.offsetWidth - frodoSelector.offsetWidth)) {
                                 if (frodoSelector.offsetTop + 1 == oneRingSelector.offsetTop) {
                                     score++;
                                     document.getElementById("score").textContent = score;
                                     alert("You WON ! The eye of Sauron has been destroyed.");
                                 } else {
-                                    alert("You LOST ! Sauron took back his ring and he will rule the world.");
+                                    alert("You LOST ! Sauron has taken back his ring and he will rule the world.");
                                     if (score != 0) { score--; }
                                     document.getElementById("score").textContent = score;
                                 }
@@ -188,41 +189,42 @@ class Move {
                 }
             }
         }
+        
         if (top_rb.checked) {
-            resetCheck = false;
+            isReset = false;
             var id_t = setInterval(frame, 20);
             function frame() {
-                if (resetCheck) {
+                if (isReset) {
                     clearInterval(id_t);
                     return;
                 } else {
-                    if (frodoLocation[1] == areaSelector.offsetTop) {
+                    if (frodo.frodoLocation[1] == areaSelector.offsetTop) {
                         clearInterval(id_t);
                     } else {
                         if (bottom_rb.checked) {
                             allClearInterval();
                         } else {
-                            frodoLocation[1]--;
-                            frodoSelector.style.top = frodoLocation[1] + "px";
-                            if (first == 0) {
+                            frodo.frodoLocation[1]--;
+                            frodoSelector.style.top = frodo.frodoLocation[1] + "px";
+                            if (firstMove) {
                                 if (right_rb.checked || left_rb.checked) {
                                     allClearInterval();
-                                    first++;
+                                    firstMove=false;
                                 }
                             }
-                            if (oneRingSelector.offsetLeft <= (frodoLocation[0] + 1) && (frodoLocation[0] + 1) <= oneRingSelector.offsetLeft + oneRingSelector.offsetWidth) {
+                            if (oneRingSelector.offsetLeft <= (frodo.frodoLocation[0] + 1) && (frodo.frodoLocation[0] + 1) <= oneRingSelector.offsetLeft + oneRingSelector.offsetWidth) {
                                 console.log(oneRingSelector.offsetWidth)
-                                if (oneRingSelector.offsetTop <= (frodoLocation[1] + 2) && frodoLocation[1] <= oneRingSelector.offsetTop + oneRingSelector.offsetHeight) {
-                                    oneRingSelector.style.top = (frodoLocation[1] - 1) + 'px';
+                                if (oneRingSelector.offsetTop <= (frodo.frodoLocation[1] + 2) && frodo.frodoLocation[1] <= oneRingSelector.offsetTop + oneRingSelector.offsetHeight) {
+                                    oneRingSelector.style.top = (frodo.frodoLocation[1] - 1) + 'px';
                                 }
                             }
-                            if (frodoSelector.offsetTop == areaSelector.offsetHeight && (frodoSelector.offsetLeft == mtDoomSelector.offsetLeft || frodoSelector.offsetLeft == (mtDoomSelector.offsetLeft + frodoSelector.offsetWidth))) {
-                                if (frodoSelector.offsetTop + 1 == oneRingSelector.offsetTop) {
+                            if (frodoSelector.offsetTop == (areaSelector.offsetHeight - frodoSelector.offsetHeight) && (frodoSelector.offsetLeft >= mtDoomSelector.offsetLeft && frodoSelector.offsetLeft <= mtDoomSelector.offsetLeft + mtDoomSelector.offsetWidth - frodoSelector.offsetWidth)) {
+                                if (frodoSelector.offsetTop + 1 == mtDoomSelector.offsetTop) {
                                     score++;
                                     document.getElementById("score").textContent = score;
                                     alert("You WON ! The eye of Sauron has been destroyed.");
                                 } else {
-                                    alert("You LOST ! Sauron took back his ring and he will rule the world.");
+                                    alert("You LOST ! Sauron has taken back his ring and he will rule the world.");
                                     if (score != 0) { score--; }
                                     document.getElementById("score").textContent = score;
                                 }
@@ -236,7 +238,7 @@ class Move {
     }
 }
 
-var animation = new Move();
+var animation = new Animation();
 var frodo = new Frodo();
 var mtDoom = new MtDoom();
 var theRing = new Ring();
